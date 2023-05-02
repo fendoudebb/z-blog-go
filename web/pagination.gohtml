@@ -1,0 +1,73 @@
+{{- define "pagination" }}
+    <style>
+        ul.pagination {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.pagination li {
+            display: inline;
+        }
+
+        ul.pagination li a {
+            color: black;
+            float: left;
+            padding: 6px 12px;
+            margin: 2px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        ul.pagination li a.active {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 3px;
+        }
+
+        ul.pagination li a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+        .disabled {
+            cursor: not-allowed;
+        }
+    </style>
+    <div style="text-align: center;margin-top: 20px">
+        <ul class="pagination">
+            <li>
+                {{- if eq .CurrentPage 1 }}
+                    <a class="disabled" href="javascript:void(0);">上一页</a>
+                {{- else }}
+                    <a href="?page=1">首页</a>
+                    <a href="?page={{add .CurrentPage -1}}">上一页</a>
+                {{- end }}
+            </li>
+            {{- $x := . }}
+            {{- $left := add $x.CurrentPage -4 }}
+            {{- $right := add $x.CurrentPage 4 }}
+            {{- range $i, $e := loop $x.SumPage }}
+                {{- with $t := add $i 1 }}
+                    {{- if and (gt $t $left) (lt $t $right) }}
+                        <li>
+                            {{- if eq $t $x.CurrentPage }}
+                                <a class="active disabled" href="javascript:void(0);">{{$t}}</a>
+                            {{- else }}
+                                <a href="?page={{$t}}">{{$t}}</a>
+                            {{- end }}
+                        </li>
+                    {{- end }}
+                {{- end }}
+            {{- end }}
+            <li>
+                {{- if lt .CurrentPage .SumPage }}
+                    <a href="?page={{add .CurrentPage 1}}">下一页</a>
+                    <a href="?page={{.SumPage}}">尾页</a>
+                {{- else }}
+                    <a class="disabled" href="javascript:void(0);">下一页</a>
+                {{- end }}
+            </li>
+        </ul>
+    </div>
+{{- end }}

@@ -1,0 +1,70 @@
+{{- define "topic" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        {{- template "css_list" . }}
+        <style>
+            .content p {
+                margin: 10px 0;
+                font-size: 12px;
+            }
+
+            .button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: #F5F5F5;
+                padding: 8px 12px;
+                margin: 5px 5px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        {{- $posts := .Data }}
+        {{- if $posts }}
+            <div class="content">
+                <ul>
+                    {{- range $posts }}
+                        <li class="shadow index-post-item">
+                            <a href="/p/{{.Id}}.html" class="index-post-title-a ellipsis"
+                               title="{{.Title}}">{{.Title}}</a>
+                            <p class="index-post-desc">{{.Description}}</p>
+                            <p>
+                        <span style="color: #8a8a8a">{{.CreateTs.Format "2006-01-02"}}，阅读：{{.Pv}}
+                            {{- if .Topics }}
+                                ，标签：
+                                {{- range .Topics }}
+                                    <a href="/topic/{{.}}.html" class="anchor-link-a" title="标签：{{.}}">{{.}}</a>
+                                {{- end }}
+                            {{- end }}
+                    </span>
+                            </p>
+                        </li>
+                    {{- end }}
+                </ul>
+                {{template "pagination" .}}
+            </div>
+        {{- else }}
+            <div class="content" style="text-align: center">
+                <div class="shadow" style="padding: 30px">
+                    该标签下暂无文章
+                </div>
+                <div style="margin-top: 20px">
+                    <button class="shadow button" title="返回首页">
+                        <a href="/" style="color: #F5F5F5; text-decoration: none;">返回首页</a>
+                    </button>
+                </div>
+            </div>
+        {{- end }}
+    </div>
+    {{- template "footer" . }}
+    {{- template "base_js" . }}
+    </body>
+    </html>
+{{- end }}

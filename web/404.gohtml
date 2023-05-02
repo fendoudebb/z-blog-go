@@ -1,0 +1,38 @@
+{{- define "404" }}
+    <!doctype html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        <style>
+            .button {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: #F5F5F5;
+                padding: 8px 12px;
+                margin: 5px 5px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        <div class="content">
+            <div class="shadow" style="padding: 30px;text-align: center">
+                页面不存在~
+            </div>
+            <div style="margin-top: 20px;text-align: center">
+                <button class="shadow button" title="返回首页">
+                    <a href="/" style="color: #F5F5F5; text-decoration: none;">返回首页</a>
+                </button>
+            </div>
+        </div>
+    </div>
+    {{- template "footer" . }}
+    {{- template "base_js" . }}
+    </body>
+    </html>
+{{- end }}

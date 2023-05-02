@@ -1,0 +1,58 @@
+{{- define "header" }}
+    <style>
+        .header {
+            height: auto;
+            background-color: white;
+            min-height: 48px;
+            line-height: 48px;
+            text-align: center;
+        }
+
+        .header ul {
+            display: inline-block;
+        }
+
+        .header li {
+            display: inline-block;
+            transition: border-color .3s, background-color .3s, color .3s;
+        }
+
+        .header li:hover {
+            background-color: #fafafa;
+            /*background-color: #e4e6e8;*/
+        }
+
+        .header li:hover a {
+            color: #4CAF50;
+        }
+
+        .header ul li a {
+            display: inline-block;
+            padding: 0 20px;
+            font-size: 14px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .header a:active {
+            color: #4CAF50;
+        }
+    </style>
+    <div class="header">
+        <ul>
+            <li>
+                <a href="/" title="首页" {{ if eq .Req.URL.Path "/" }}style="color: #4CAF50"{{ end }}>首页</a>
+            </li>
+            <li>
+                <a href="/message-board.html" title="留言板"
+                   {{ if eq .Req.URL.Path "/message-board.html" }}style="color: #4CAF50"{{ end }}>留言板</a>
+            </li>
+            <li>
+                <a href="/english.html" title="英语角"
+                   {{ if eq .Req.URL.Path "/english.html" }}style="color: #4CAF50"{{ end }}>英语角</a>
+            </li>
+            <!--<a href="https://github.com/fendoudebb" target="_blank" title="Github">Github</a>-->
+        </ul>
+    </div>
+    <hr>
+{{- end }}

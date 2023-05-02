@@ -1,0 +1,42 @@
+server:
+  host: localhost
+  port: 8080
+  gracefulTimeout: 10s
+
+database:
+  host: localhost
+  port: 5432
+  name: blog
+  user: postgres
+  password: 123456
+
+pprof:
+  host: localhost
+  port: 6060
+
+website:
+  name: blog
+  author: fendoudebb
+  keywords: Java, Go
+  description: Java, Go
+  github: https://github.com/fendoudebb/z-blog-go
+  meta:
+    - name: a
+      content: b
+  css:
+    highlight: https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css
+  js:
+    jquery: https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js
+    highlight: https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js
+    clipboard: https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js
+  icp:
+    id: 123456
+    link: https://beian.miit.gov.cn
+  statistics:
+    - name: baidu
+      value: 123456
+      enable: false
+    - name: google
+      value: 123456
+      enable: false
+

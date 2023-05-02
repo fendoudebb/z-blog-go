@@ -1,0 +1,53 @@
+{{- define "topics" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        <style>
+            .shadow {
+                margin-bottom: 8px;
+                padding: 16px 24px;
+                word-wrap: break-word;
+            }
+
+            .topic-a {
+                color: #8a8a8a;
+                font-size: 12px;
+                display: inline-block;
+                text-decoration: none;
+                border-radius: 3px;
+                border: 1px solid #8a8a8a;
+                padding: 2px 5px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+
+            .topic-a:active {
+                color: #999;
+            }
+
+            .topic-a:hover span {
+                color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        <div class="content">
+            <div class="shadow">
+                <h1>标签列表</h1>
+                {{- range .Data }}
+                    <a class="topic-a" href="/topic/{{.Name}}.html" title="{{.Name}}">
+                        <span>{{.Name}} - {{.Count}}篇</span>
+                    </a>
+                {{- end }}
+                {{- template "broadcast" . }}
+            </div>
+        </div>
+    </div>
+    {{- template "footer" . }}
+    {{- template "base_js" . }}
+    </body>
+    </html>
+{{- end }}

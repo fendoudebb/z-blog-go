@@ -1,0 +1,43 @@
+{{- define "index" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        {{- template "css_list" . }}
+        <style>
+            .content p {
+                margin: 10px 0;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        <div class="content">
+            <ul>
+                {{- range .Data }}
+                    <li class="shadow index-post-item">
+                        <a href="/p/{{.Id}}.html" class="index-post-title-a ellipsis" title="{{.Title}}">{{.Title}}</a>
+                        <p class="index-post-desc">{{.Description}}</p>
+                        <p>
+                        <span style="color: #8a8a8a">{{.CreateTs.Format "2006-01-02"}}，阅读：{{.Pv}}
+                            {{- if .Topics }}
+                                ，标签：
+                                {{- range .Topics }}
+                                    <a href="/topic/{{.}}.html" class="anchor-link-a" title="标签：{{.}}">{{.}}</a>
+                                {{- end }}
+                            {{- end }}
+                        </span>
+                        </p>
+                    </li>
+                {{- end }}
+            </ul>
+            {{- template "pagination" . }}
+        </div>
+    </div>
+    {{- template "footer" . }}
+    {{- template "base_js" . }}
+    </body>
+    </html>
+{{- end }}
