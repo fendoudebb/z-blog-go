@@ -56,7 +56,7 @@ func main() {
 	}()
 
 	go func() {
-		log.Println("serve run in", app.Server.Port)
+		log.Println("serve run in pid:", os.Getpid(), "port:", app.Server.Port)
 		watcher, _ := web.ConfigTemplateDir("web")
 		if watcher != nil {
 			defer watcher.Close()
