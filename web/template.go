@@ -30,6 +30,9 @@ var funcMap = map[string]any{
 	"add": func(i int, delta int) int {
 		return i + delta
 	},
+	"unescapeHTML": func(s string) template.HTML {
+		return template.HTML(s)
+	},
 }
 
 func init() {
