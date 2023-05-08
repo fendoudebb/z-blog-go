@@ -282,19 +282,27 @@
     <div class="main">
         <div class="content">
             <div class="shadow">
-                    <h1>{{$post.Title}}</h1>
-                    {{- range $post.Topics }}
-                        <a href="/topic/{{.}}.html" class="badge-a" title="{{.}}">{{.}}</a>
-                    {{- end }}
-                    <span class="text-secondary" style="margin-left: .5rem!important;">大约 {{$post.WordCount}} 字</span>
-                    <!--            <hr>-->
-                    <div>{{$post.ContentHtml | unescapeHTML}}</div>
+                <h1>{{$post.Title}}</h1>
+                {{- range $post.Topics }}
+                    <a href="/topic/{{.}}.html" class="badge-a" title="{{.}}">{{.}}</a>
+                {{- end }}
+                <span class="text-secondary" style="margin-left: .5rem!important;">大约 {{$post.WordCount}} 字</span>
+                <!--            <hr>-->
+                <div>{{$post.ContentHtml | unescapeHTML}}</div>
 
-                    <div style="margin-top: 1.25rem">
-                        <span class="text-secondary">阅读 {{$post.Pv}} · 发布于 {{$post.CreateTs.Format "2006-01-02"}}</span>
-                    </div>
+                <div style="margin-top: 1.25rem">
+                    <span class="text-secondary">阅读 {{$post.Pv}} · 发布于 {{$post.CreateTs.Format "2006-01-02"}}</span>
+                </div>
                 {{- template "broadcast" . }}
             </div>
+
+            {{- if .Website.Comment.Enabled }}
+                {{- if eq .Website.Comment.Type "giscus" }}
+                    <hr>
+                    {{ .Website.Comment.Script | unescapeHTML }}
+                    <hr>
+                {{- end}}
+            {{- end }}
 
             <div>
                 <div class="shadow top-area" style="margin-bottom: 0">
