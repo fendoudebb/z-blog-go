@@ -41,7 +41,9 @@
                         <span>{{.Website}}</span>
                     </a>
                 {{- end }}
-                {{- template "broadcast" . }}
+                {{- if .Website.Promotion.Enabled }}
+                    {{- template "promotion" . }}
+                {{- end }}
             </div>
         </div>
     </div>

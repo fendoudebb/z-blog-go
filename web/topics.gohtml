@@ -42,7 +42,9 @@
                         <span>{{.Name}} - {{.Count}}篇</span>
                     </a>
                 {{- end }}
-                {{- template "broadcast" . }}
+                {{- if .Website.Promotion.Enabled }}
+                    {{- template "promotion" . }}
+                {{- end }}
             </div>
         </div>
     </div>
