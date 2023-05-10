@@ -1,0 +1,24 @@
+{{- define "message_board" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        <div class="content">
+            {{- if .Website.Comment.Enabled }}
+                {{- if eq .Website.Comment.Type "giscus" }}
+                    <hr>
+                    {{ .Website.Comment.Script | unescapeHTML }}
+                    <hr>
+                {{- end}}
+            {{- end }}
+
+        </div>
+    </div>
+    {{- template "footer" . }}
+    </body>
+    </html>
+{{- end }}
