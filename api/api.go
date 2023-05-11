@@ -9,6 +9,8 @@ import (
 
 func Register(r *mux.Router) {
 	r.HandleFunc("/", controller.IndexHandler).Methods(http.MethodGet)
+	r.HandleFunc("/sitemap.xml", controller.SitemapHandler).Methods(http.MethodGet)
+	r.HandleFunc("/message-board.html", controller.MessageBoardHandler).Methods(http.MethodGet)
 	r.HandleFunc("/topic/{topic}.html", controller.TopicHandler).Methods(http.MethodGet)
 	r.HandleFunc("/topics.html", controller.TopicsHandler).Methods(http.MethodGet)
 	r.HandleFunc("/links.html", controller.LinksHandler).Methods(http.MethodGet)
