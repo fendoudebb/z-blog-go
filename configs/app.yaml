@@ -20,6 +20,10 @@ website:
   keywords: Java, Go
   description: Java, Go
   github: https://github.com/fendoudebb/z-blog-go
+  promotion:
+    enabled: true
+    text: 扫描下方二维码关注公众号和小程序↓↓↓
+    image: /qrcode.png
   comment:
     enabled: true
     type: giscus

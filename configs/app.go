@@ -36,10 +36,17 @@ type Website struct {
 	GitHub      string
 	Css         map[string]string
 	Js          map[string]string
+	Promotion   Promotion
 	Comment     Comment
 	Icp         ICP
 	Meta        []WebsiteMeta
 	Statistics  []WebsiteStatistics
+}
+
+type Promotion struct {
+	Enabled bool
+	Text    string
+	Image   string
 }
 
 type Comment struct {
