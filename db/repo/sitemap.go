@@ -2,11 +2,13 @@ package repo
 
 import (
 	"fmt"
+	"net/http"
 	"z-blog-go/db"
+	"z-blog-go/helper"
 )
 
-func GetSitemap() (string, error) {
-	baseUrl := `http://localhost:8080`
+func GetSitemap(r *http.Request) (string, error) {
+	baseUrl := helper.GetHost(r) + "://" + helper.GetIp(r)
 	sql := fmt.Sprintf(`
 select
 xmlroot(
