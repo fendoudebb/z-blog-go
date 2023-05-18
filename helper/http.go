@@ -15,5 +15,8 @@ func GetHost(r *http.Request) string {
 	if host == "" {
 		host = r.Header.Get("Host")
 	}
+	if host == "" {
+		host = r.Host
+	}
 	return host
 }
