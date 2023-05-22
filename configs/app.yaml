@@ -47,11 +47,11 @@ website:
     - name: a
       content: b
   css:
-    highlight: https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/styles/atom-one-dark.min.css
+    highlight: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.3/styles/atom-one-dark.min.css
   js:
-    jquery: https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js
-    highlight: https://cdn.bootcdn.net/ajax/libs/highlight.js/10.3.2/highlight.min.js
-    clipboard: https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.6/clipboard.min.js
+    jquery: https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js
+    highlight: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.3/highlight.min.js
+    clipboard: https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
   icp:
     id: 123456
     link: https://beian.miit.gov.cn
