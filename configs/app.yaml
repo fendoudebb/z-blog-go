@@ -49,9 +49,12 @@ website:
   css:
     highlight: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.3/styles/atom-one-dark.min.css
   js:
-    jquery: https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js
-    highlight: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.3/highlight.min.js
-    clipboard: https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
+    highlight:
+      - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.3/highlight.min.js
+      - https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.3/highlight.min.js
+    clipboard:
+      - https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
+      - https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js
   icp:
     id: 123456
     link: https://beian.miit.gov.cn

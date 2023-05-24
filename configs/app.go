@@ -35,7 +35,7 @@ type Website struct {
 	Description string
 	GitHub      string
 	Css         map[string]string
-	Js          map[string]string
+	Js          map[string][]string
 	Promotion   Promotion
 	Comment     Comment
 	Icp         ICP
