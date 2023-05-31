@@ -4,12 +4,14 @@ import (
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+	"time"
 	"z-blog-go/db/repo"
 	"z-blog-go/task"
 	"z-blog-go/web"
 )
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
+	defer repo.Record(r, time.Now())
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 	post, _ := repo.GetPost(id)
@@ -19,6 +21,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostRandomHandler(w http.ResponseWriter, r *http.Request) {
+	defer repo.Record(r, time.Now())
 	posts, _ := repo.GetRandomPosts()
 	task.PostStat.RandomPost = posts
 	Ok(w, posts)
