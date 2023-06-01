@@ -16,13 +16,13 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 	post, _ := repo.GetPost(id)
 	attr := NewAttr(r, post)
-	attr.Extra = task.PostStat.RandomPost
+	attr.Extra = task.WebsiteStat.RandomPost
 	web.ExecuteTemplate(w, "post", attr)
 }
 
 func PostRandomHandler(w http.ResponseWriter, r *http.Request) {
 	defer repo.Record(r, time.Now())
 	posts, _ := repo.GetRandomPosts()
-	task.PostStat.RandomPost = posts
+	task.WebsiteStat.RandomPost = posts
 	Ok(w, posts)
 }

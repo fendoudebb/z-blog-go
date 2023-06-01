@@ -22,6 +22,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		size = 20
 	}
 	posts, _ := repo.GetPosts(page, size)
-	attr := NewPaginationAttr(r, posts, page, int(math.Ceil(float64(task.PostStat.Count)/float64(size))))
+	attr := NewPaginationAttr(r, posts, page, int(math.Ceil(float64(task.WebsiteStat.PostCount)/float64(size))))
 	web.ExecuteTemplate(w, "index", attr)
 }
