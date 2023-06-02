@@ -35,3 +35,12 @@ func QueryAddress(ip string) (IpAddress, error) {
 	}
 	return ipAddress, nil
 }
+
+func CountIps() (int, error) {
+	var count int
+	row := db.DB.QueryRow("select count(*) from ip_pool")
+	if err := row.Scan(&count); err != nil {
+		return count, fmt.Errorf("CountIps: %v", err)
+	}
+	return count, nil
+}
