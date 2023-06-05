@@ -1,0 +1,173 @@
+{{- define "statistics" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        <style>
+            .statistics-widget {
+                margin-bottom: 8px;
+                padding: 16px 24px;
+            }
+
+            .statistics-widget h3 {
+                font-size: 15px;
+                font-weight: bold;
+                margin: 0;
+                padding-bottom: 8px;
+            }
+
+            .statistics-widget h3::before {
+                display: inline-block;
+                margin-right: 8px;
+                content: '';
+                width: 4px;
+                height: 22px;
+                vertical-align: -6px;
+                background-color: #4CAF50;
+            }
+
+            .statistics-widget ul, .statistics-widget li {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .statistics-widget li {
+                transition: border-color .3s, background-color .3s, color .3s;
+                padding: 8px 24px;
+                margin: 0 -24px;
+                outline: 0;
+            }
+
+            .statistics-widget li:hover {
+                background-color: #EFEEEE;
+            }
+
+            .statistics-widget li:not(:last-child) {
+                border-bottom: 1px dashed #8a8a8a;
+            }
+
+            .statistics-widget li a {
+                display: block;
+                color: #8a8a8a;
+                text-decoration: none;
+                line-height: 22px;
+                max-height: 44px;
+                overflow: hidden;
+                word-wrap: break-word;
+            }
+
+            .statistics-widget li span {
+                font-size: 12px;
+                color: #8a8a8a;
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
+            }
+
+            .statistics-widget a:active {
+                color: #999;
+            }
+
+            .statistics-widget a:hover span {
+                color: #000000;
+            }
+
+            .statistics-topic {
+                margin-top: 10px;
+            }
+
+            .statistics-topic a, .topic-a {
+                color: #8a8a8a;
+                font-size: 12px;
+                display: inline-block;
+                text-decoration: none;
+                border-radius: 3px;
+                border: 1px solid #8a8a8a;
+                padding: 2px 5px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+
+            .statistics-topic-more {
+                float: right;
+                color: #8a8a8a;
+                font-size: 12px;
+                text-decoration: none;
+                line-height: 22px;
+                max-height: 44px;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        <div class="content">
+            {{- $webStat := .Data }}
+            <div class="shadow statistics-widget">
+                <h3>站长统计</h3>
+                <ul>
+                    <li>
+                        <span>文章数：{{$webStat.PostCount}}</span>
+                    </li>
+                    <li>
+                        <span>访客数：{{$webStat.IpCount}}</span>
+                    </li>
+                    <li>
+                        <span>浏览量：{{$webStat.PageView}}</span>
+                    </li>
+                </ul>
+            </div>
+
+            {{- if $webStat.RankPosts }}
+                <div class="shadow statistics-widget">
+                    <h3>阅读排行榜</h3>
+                    <ul>
+                        {{- range $webStat.RankPosts }}
+                            <li>
+                                <a href="/p/{{.Id}}.html" title="{{.Title}}">
+                                    <span>{{.Title}}</span>
+                                    <span>阅读数：{{.Pv}}</span>
+                                </a>
+                            </li>
+                        {{- end }}
+                    </ul>
+                </div>
+            {{- end }}
+
+            {{- if $webStat.RecommendedTopics }}
+                <div class="shadow statistics-widget">
+                    <div>
+                        <h3 style="display: inline">推荐标签</h3>
+                        {{- if $webStat.Topics }}
+                            <a class="statistics-topic-more" href="/topics.html" title="查看更多标签">
+                                <span>更多</span>
+                            </a>
+                        {{- end }}
+                    </div>
+                    <div class="statistics-topic">
+                        {{- range $webStat.RecommendedTopics }}
+                            <a href="/topic/{{.}}.html" title="{{.}}"><span>{{.}}</span></a>
+                        {{- end }}
+                    </div>
+                </div>
+            {{- end }}
+
+            {{- if $webStat.Links }}
+                <div class="shadow statistics-widget">
+                    <h3>友情链接</h3>
+                    <div class="statistics-topic">
+                        {{- range $webStat.Links }}
+                            <a href="{{.Url}}" title="{{.Website}}" target="_blank"><span>{{.Website}}</span></a>
+                        {{- end }}
+                    </div>
+                </div>
+            {{- end }}
+
+        </div>
+    </div>
+    {{- template "footer" . }}
+    </body>
+    </html>
+{{- end }}
