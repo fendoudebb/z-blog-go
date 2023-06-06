@@ -19,9 +19,15 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1"/>
     <meta name="referrer" content="always">
-    <meta name="copyright" content="{{.Website.Name}}"/>
-    <!-- 定义网页作者 author -->
-    <meta name="author" content="{{.Website.Author}}"/>
+    {{- if .Website.Name }}
+        <meta name="copyright" content="{{.Website.Name}}"/>
+        <!-- 添加到主屏后的标题 -->
+        <meta name="apple-mobile-web-app-title" content="{{.Website.Name}}"/>
+    {{- end }}
+    {{- if .Website.Author }}
+        <!-- 定义网页作者 author -->
+        <meta name="author" content="{{.Website.Author}}"/>
+    {{- end }}
     <!--
         定义网页搜索引擎索引方式，robotterms 是一组使用英文逗号「,」分割的值
         通常有如下几种取值
@@ -36,7 +42,7 @@
     <meta name="robots" content="all"/>
     {{- range .Website.Meta }}
         <meta name="{{.Name}}" content="{{.Content}}"/>
-    {{- end}}
+    {{- end }}
 
     <!--Google Chrome-->
     <!-- 优先使用最新的chrome版本 -->
@@ -81,8 +87,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <!-- 设置状态栏的背景颜色,只有在 “apple-mobile-web-app-capable” content=”yes” 时生效 -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <!-- 添加到主屏后的标题 -->
-    <meta name="apple-mobile-web-app-title" content="{{.Website.Name}}"/>
 
     <!--Google Android-->
     <meta name="theme-color" content="#E64545"/>
@@ -335,7 +339,7 @@
         </script>
     {{- end }}
 
-    {{- range .Website.Statistics }}
+    {{- range .Website.Analysis }}
         {{- if .Enable }}
             {{- if eq .Name "baidu" }}
                 <script>
