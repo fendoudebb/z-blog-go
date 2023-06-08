@@ -43,6 +43,12 @@
             <li>
                 <a href="/" title="首页" {{ if eq .Req.URL.Path "/" }}style="color: #4CAF50"{{ end }}>首页</a>
             </li>
+            {{- if .WebsiteStat.Topics }}
+                <li>
+                    <a href="/topics.html" title="标签"
+                       {{ if eq .Req.URL.Path "/topics.html" }}style="color: #4CAF50"{{ end }}>标签</a>
+                </li>
+            {{- end }}
             {{- if .Website.Comment.Enabled }}
                 {{- if eq .Website.Comment.Type "giscus" }}
                     <li>
@@ -52,14 +58,9 @@
                 {{- end}}
             {{- end }}
             <li>
-                <a href="/topics.html" title="标签"
-                   {{ if eq .Req.URL.Path "/topics.html" }}style="color: #4CAF50"{{ end }}>标签</a>
+                <a href="/statistics.html" title="网站统计"
+                   {{ if eq .Req.URL.Path "/statistics.html" }}style="color: #4CAF50"{{ end }}>网站统计</a>
             </li>
-            <li>
-                <a href="/links.html" title="友链"
-                   {{ if eq .Req.URL.Path "/links.html" }}style="color: #4CAF50"{{ end }}>友链</a>
-            </li>
-            <!--<a href="https://github.com/fendoudebb" target="_blank" title="Github">Github</a>-->
         </ul>
     </div>
     <hr>
