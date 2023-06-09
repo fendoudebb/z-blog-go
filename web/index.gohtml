@@ -33,7 +33,9 @@
                     </li>
                 {{- end }}
             </ul>
-            {{- template "pagination" . }}
+            {{- if .WebsiteStat.PostCount }}
+                {{- template "pagination" . }}
+            {{- end }}
         </div>
     </div>
     {{- template "footer" . }}
