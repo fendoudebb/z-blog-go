@@ -1,0 +1,204 @@
+{{- define "search" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{- template "base" . }}
+        {{- template "css_list" . }}
+        <style>
+            input {
+                /*去除ios input框点击时的灰色背景*/
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                /*iOS input会有阴影*/
+                -webkit-appearance: none;
+            }
+
+            /*移除datalist下拉箭头*/
+            [list]::-webkit-calendar-picker-indicator {
+                display: none !important;
+            }
+
+            /*输入框清空按钮*/
+            input[type=search]::-webkit-search-cancel-button {
+                -webkit-appearance: none;
+                height: 20px;
+                width: 20px;
+                margin-left: 5px;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+                cursor: pointer;
+            }
+
+            .search-input {
+                caret-color: #4CAF50; /*光标颜色*/
+                width: 80%;
+                height: 32px;
+                line-height: 16px;
+                display: inline-block;
+                text-align: initial;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 18 18'%3E%3Cpath fill='%23c8c8c8' d='M18 16.5l-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 10px center/16px;
+                padding-left: 30px;
+                border: 1px solid #c8c8c8;
+                border-radius: 3px 0 0 3px;
+                font-weight: 400;
+                font-size: 14px;
+            }
+
+            .search-input:focus {
+                outline: none;
+                border: 1px solid #4CAF50;
+                border-radius: 3px 0 0 3px;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 18 18'%3E%3Cpath fill='%234CAF50' d='M18 16.5l-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5zM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat 10px center/16px;
+            }
+
+            .search-button {
+                cursor: pointer;
+                float: right;
+                outline: none;
+                text-align: center;
+                width: 20%;
+                height: 32px;
+                line-height: 16px;
+                background: #4CAF50;
+                color: #fff;
+                border: 1px solid #4CAF50;
+                border-radius: 0 3px 3px 0;
+                white-space: nowrap;
+            }
+
+            .search-hint {
+                color: #c8c8c8;
+                font-size: 12px;
+                margin: 10px;
+            }
+
+            .content p {
+                margin: 10px 0;
+                font-size: 12px;
+            }
+
+            b {
+                color: red;
+            }
+
+            .disabled {
+                cursor: not-allowed;
+            }
+
+            .pagination {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .pagination a {
+                color: black;
+                padding: 6px 12px;
+                margin: 2px;
+                text-decoration: none;
+                border-radius: 3px;
+                font-size: 12px;
+            }
+
+            .pagination a.active {
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 3px;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+            }
+        </style>
+    </head>
+    <body>
+    {{- template "header" . }}
+    <div class="main">
+        {{/*{{- $keywords := .Req.URL.Query.Get "keywords" }}*/}}
+        {{- $keywords := .Req.Context.Value "keywords" }}
+        {{- $page := .Req.Context.Value "page" }}
+        {{- $size := .Req.Context.Value "size" }}
+        {{- $maxlength := .Req.Context.Value "maxlength" }}
+        {{- $post := .Data }}
+        <div class="content">
+            <div>
+                <input type="search" class="search-input" value="{{$keywords}}" maxlength="{{$maxlength}}"
+                       list="custom-datalist" placeholder="请输入关键字" autocomplete="off">
+                <button type="button" class="search-button">搜索</button>
+                <datalist id="custom-datalist">
+                    <option value="IDEA">PhpStorm/WebStorm/PyCharm</option>
+                    <option value="Java">Spring Boot</option>
+                    <option value="OpenResty">Lua</option>
+                    <option value="PostgreSQL"></option>
+                    <option value="小程序">
+                </datalist>
+            </div>
+            <div>
+                <ul class="search-hint">
+                    <li>不带引号：表示必须包含所有关键词</li>
+                    <li>带引号""：表示必须包含引号内的关键词</li>
+                    <li>or：表示只需包含一个关键词</li>
+                    <li>-：表示不包含指定关键词</li>
+                </ul>
+            </div>
+            {{- if $post }}
+                <ul>
+                    {{- range $post }}
+                        <li class="shadow index-post-item">
+                            <a href="/p/{{.Id}}.html" class="index-post-title-a ellipsis">{{.Title | unescapeHTML}}</a>
+                            <p class="index-post-desc">{{.Description | unescapeHTML}}</p>
+                            <p>
+                            <span style="color: #8a8a8a">{{.CreateTs.Format "2006-01-02"}}，阅读：{{.Pv}}
+                                {{- if .Topics }}
+                                    ，标签：
+                                    {{- range .Topics }}
+                                        <a href="/topic/{{.}}.html" class="anchor-link-a" title="标签：{{.}}">{{.}}</a>
+                                    {{- end }}
+                                {{- end }}
+                            </span>
+                            </p>
+                        </li>
+                    {{- end }}
+                </ul>
+                <div class="pagination">
+                    {{- if eq $page 1 }}
+                        <a class="disabled" href="javascript:void(0);">上一页</a>
+                    {{- else }}
+                        <a href="?keywords={{$keywords}}&page={{add $page -1}}">上一页</a>
+                    {{- end }}
+
+                    {{- if eq $size (len $post) }}
+                        <a href="?keywords={{$keywords}}&page={{add $page 1}}">下一页</a>
+                    {{- else }}
+                        <a class="disabled" href="javascript:void(0);">下一页</a>
+                    {{- end }}
+                </div>
+            {{- else }}
+                {{- if $keywords }}
+                    <div class="shadow" style="padding: 30px;text-align: center">
+                        未搜索到内容
+                    </div>
+                {{- end }}
+            {{- end }}
+        </div>
+    </div>
+    {{- template "footer" . }}
+    <script>
+        let searchBtn = document.querySelector(".search-button");
+        let searchInput = document.querySelector(".search-input");
+
+        function searchKeywords() {
+            let keywords = searchInput.value.trim();
+            if (keywords.length > 0) {
+                window.location.href = `/search.html?keywords=${keywords}`
+            }
+        }
+
+        searchBtn.addEventListener("click", searchKeywords);
+        searchInput.addEventListener("keyup", event => {
+            if (event.keyCode === 13) {
+                searchKeywords();
+                event.preventDefault();
+            }
+        });
+    </script>
+    </body>
+    </html>
+{{- end }}
