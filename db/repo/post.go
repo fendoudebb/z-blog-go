@@ -131,17 +131,25 @@ func CountPostsByTopic(topic string) (int, error) {
 func GetPostsByKeywords(tsconfig string, keywords string, page int, size int) ([]Post, error) {
 	var posts []Post
 	sql := fmt.Sprintf(`
-select id, ts_headline('%s', title, q) title, topics, ts_headline('%s', description, q, 'MaxFragments=2, MaxWords=20, MinWords=10, StartSel = <b>, StopSel = </b>') description, pv, create_ts
-from post, tsvector_concat(setweight(to_tsvector('%s', title), 'A'), setweight(to_tsvector('%s', description), 'D')) as v, websearch_to_tsquery('%s', $1) q
-where post_status = 0 and v @@ q order by ts_rank(v, q) desc limit $2 offset $3`, tsconfig, tsconfig, tsconfig, tsconfig, tsconfig)
-	rows, err := db.DB.Query(sql, keywords, size, (page-1)*size)
+select id, pv, create_ts,
+       ts_headline('%s', title, q) as title,
+       string_to_array(ts_headline('%s', array_to_string(topics, ','), q), ',') as topics,
+       ts_headline('%s', description, q, 'MaxFragments=0, MaxWords=10, MinWords=3, StartSel = <b>, StopSel = </b>') as description
+from (select id, title, description, topics, pv, create_ts,
+             tsvector_concat(setweight(to_tsvector('%s', title), 'A'), setweight(to_tsvector('%s', description), 'D')) v,
+             websearch_to_tsquery('%s', $1) q
+      from post where post_status=0
+) temp
+where v @@ q order by ts_rank(v, q) desc offset $2 fetch first $3 rows only
+`, tsconfig, tsconfig, tsconfig, tsconfig, tsconfig, tsconfig)
+	rows, err := db.DB.Query(sql, keywords, (page-1)*size, size)
 	if err != nil {
 		return nil, fmt.Errorf("GetPostsByKeywords: %v", err)
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var post Post
-		if err := rows.Scan(&post.Id, &post.Title, pq.Array(&post.Topics), &post.Description, &post.Pv, &post.CreateTs); err != nil {
+		if err := rows.Scan(&post.Id, &post.Pv, &post.CreateTs, &post.Title, pq.Array(&post.Topics), &post.Description); err != nil {
 			return nil, fmt.Errorf("GetPostsByKeywords: %v", err)
 		}
 		posts = append(posts, post)
