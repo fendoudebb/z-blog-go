@@ -59,6 +59,7 @@
 
             .statistics-widget li span {
                 font-size: 12px;
+                line-height: 22px;
                 color: #8a8a8a;
                 display: block;
                 white-space: nowrap;
@@ -78,7 +79,7 @@
                 margin-top: 10px;
             }
 
-            .statistics-topic a, .topic-a {
+            .statistics-topic a {
                 color: #8a8a8a;
                 font-size: 12px;
                 display: inline-block;
@@ -109,7 +110,14 @@
                 <h3>站长统计</h3>
                 <ul>
                     <li>
-                        <span>文章数：{{$webStat.PostCount}}</span>
+                        <a href="/">
+                            <span>文章数：{{$webStat.PostCount}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/topics.html">
+                            <span>标签数：{{len $webStat.Topics}}</span>
+                        </a>
                     </li>
                     <li>
                         <span>访客数：{{$webStat.IpCount}}</span>
@@ -120,6 +128,22 @@
                 </ul>
             </div>
 
+            {{- if $webStat.Links }}
+                <div class="shadow statistics-widget">
+                    <h3>友情链接</h3>
+                    <ul>
+                        {{- range $webStat.Links }}
+                            <li>
+                                <a href="{{.Url}}" title="{{.Website}}" target="_blank">
+                                    <span>{{.Website}}</span>
+                                    <span>链接：{{.Url}}</span>
+                                </a>
+                            </li>
+                        {{- end }}
+                    </ul>
+                </div>
+            {{- end }}
+
             {{- if $webStat.RankPosts }}
                 <div class="shadow statistics-widget">
                     <h3>阅读排行榜</h3>
@@ -129,6 +153,22 @@
                                 <a href="/p/{{.Id}}.html" title="{{.Title}}">
                                     <span>{{.Title}}</span>
                                     <span>阅读数：{{.Pv}}</span>
+                                </a>
+                            </li>
+                        {{- end }}
+                    </ul>
+                </div>
+            {{- end }}
+
+            {{- if $webStat.RankSearchRecords }}
+                <div class="shadow statistics-widget">
+                    <h3>搜索排行榜</h3>
+                    <ul>
+                        {{- range $webStat.RankSearchRecords }}
+                            <li>
+                                <a href="/search.html?keywords={{.Keywords}}" title="{{.Keywords}}">
+                                    <span>{{.Keywords}}</span>
+                                    <span>搜索量：{{.Count}}</span>
                                 </a>
                             </li>
                         {{- end }}
@@ -153,18 +193,6 @@
                     </div>
                 </div>
             {{- end }}
-
-            {{- if $webStat.Links }}
-                <div class="shadow statistics-widget">
-                    <h3>友情链接</h3>
-                    <div class="statistics-topic">
-                        {{- range $webStat.Links }}
-                            <a href="{{.Url}}" title="{{.Website}}" target="_blank"><span>{{.Website}}</span></a>
-                        {{- end }}
-                    </div>
-                </div>
-            {{- end }}
-
         </div>
     </div>
     {{- template "footer" . }}
