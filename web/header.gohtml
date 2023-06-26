@@ -43,23 +43,18 @@
             <li>
                 <a href="/" title="首页" {{ if eq .Req.URL.Path "/" }}style="color: #4CAF50"{{ end }}>首页</a>
             </li>
+            <li>
+                <a href="/search.html" title="搜索" {{ if eq .Req.URL.Path "/search.html" }}style="color: #4CAF50"{{ end }}>搜索</a>
+            </li>
             {{- if .WebsiteStat.Topics }}
                 <li>
                     <a href="/topics.html" title="标签"
                        {{ if eq .Req.URL.Path "/topics.html" }}style="color: #4CAF50"{{ end }}>标签</a>
                 </li>
             {{- end }}
-            {{- if .Website.Comment.Enabled }}
-                {{- if eq .Website.Comment.Type "giscus" }}
-                    <li>
-                        <a href="/message-board.html" title="留言板"
-                           {{ if eq .Req.URL.Path "/message-board.html" }}style="color: #4CAF50"{{ end }}>留言板</a>
-                    </li>
-                {{- end}}
-            {{- end }}
             <li>
-                <a href="/statistics.html" title="网站统计"
-                   {{ if eq .Req.URL.Path "/statistics.html" }}style="color: #4CAF50"{{ end }}>网站统计</a>
+                <a href="/statistics.html" title="统计"
+                   {{ if eq .Req.URL.Path "/statistics.html" }}style="color: #4CAF50"{{ end }}>统计</a>
             </li>
         </ul>
     </div>
