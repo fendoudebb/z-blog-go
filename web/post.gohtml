@@ -309,30 +309,33 @@
                 {{- end}}
             {{- end }}
 
-            <div>
-                <div class="shadow top-area" style="margin-bottom: 0">
-                    <span class="post-random-title">随便看看</span>
-                    <span class="post-random-change">换一批</span>
-                </div>
-                <div class="shadow">
-                    <div id="post-random-hint" hidden="hidden" style="font-size: 12px;text-align: center;">
-                        加载中...
+            {{- $randomPosts := .WebsiteStat.RandomPosts }}
+            {{- if $randomPosts }}
+                <div>
+                    <div class="shadow top-area" style="margin-bottom: 0">
+                        <span class="post-random-title">随便看看</span>
+                        <span class="post-random-change">换一批</span>
                     </div>
-                    <div id="post-random">
-                        <ul id="post-random-ul" style="font-size:0">
-                            {{- $randomPosts := .Extra}}
-                            {{- range $randomPosts }}
-                                <li class='post-random-li'>
-                                    <a class='post-random-a' href="/p/{{.Id}}.html" title="{{.Title}}">
-                                        <div style="width: 75%">{{.Title}}</div>
-                                        <div style="max-width:15%;float: right">阅读 {{.Pv}}</div>
-                                    </a>
-                                </li>
-                            {{- end }}
-                        </ul>
+                    <div class="shadow">
+                        <div id="post-random-hint" hidden="hidden" style="font-size: 12px;text-align: center;">
+                            加载中...
+                        </div>
+                        <div id="post-random">
+                            <ul id="post-random-ul" style="font-size:0">
+
+                                {{- range $randomPosts }}
+                                    <li class='post-random-li'>
+                                        <a class='post-random-a' href="/p/{{.Id}}.html" title="{{.Title}}">
+                                            <div style="width: 75%">{{.Title}}</div>
+                                            <div style="max-width:15%;float: right">阅读 {{.Pv}}</div>
+                                        </a>
+                                    </li>
+                                {{- end }}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {{- end }}
         </div>
     </div>
     {{- template "footer" . }}
@@ -361,45 +364,6 @@
                 htmlElement.style.overflowY = "hidden";
             })
         }
-
-        let data = {
-            'postId': {{$post.Id}}
-        };
-        let changeRandomPostBtn = document.querySelector(".post-random-change");
-        let postRandomHint = document.querySelector("#post-random-hint");
-        let postRandomUl = document.querySelector("#post-random-ul");
-        let changeRandomPost = function () {
-            postRandomUl.hidden = true;
-            postRandomUl.innerHTML = "";
-            postRandomHint.hidden = false;
-            postRandomHint.innerHTML = "加载中...";
-            fetch("/post/random", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            }).then(res => {
-                return res.json()
-            }).then(json => {
-                if (json.code !== 0) {
-                    throw Error(`json code[${json.code}]`);
-                }
-                postRandomHint.hidden = true;
-                postRandomUl.hidden = false;
-                let randomPosts = json.data;
-                for (const post of randomPosts) {
-                    let li = document.createElement("li");
-                    li.classList.add("post-random-li");
-                    li.innerHTML = `<a class="post-random-a" href="/p/${post.id}.html" title="${post.title}"><div style="width: 75%">${post.title}</div><div style="max-width:15%;float: right">阅读数：${post.pv}</div></a>`
-                    postRandomUl.appendChild(li);
-                }
-            }).catch(err => {
-                postRandomHint.innerHTML = "加载失败...";
-                console.log('请求错误', err);
-            })
-        };
-        changeRandomPostBtn.addEventListener("click", changeRandomPost);
 
         let pres = document.querySelectorAll("pre");
         for (let i = 0; i < pres.length; i++) {
@@ -441,6 +405,47 @@
         }
 
         autoSwitch(highlightJs, highlight);
+
+        {{- if .WebsiteStat.RandomPosts }}
+            let data = {
+                'postId': {{$post.Id}}
+            };
+            let changeRandomPostBtn = document.querySelector(".post-random-change");
+            let postRandomHint = document.querySelector("#post-random-hint");
+            let postRandomUl = document.querySelector("#post-random-ul");
+            let changeRandomPost = function () {
+                postRandomUl.hidden = true;
+                postRandomUl.innerHTML = "";
+                postRandomHint.hidden = false;
+                postRandomHint.innerHTML = "加载中...";
+                fetch("/post/random", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }).then(res => {
+                    return res.json()
+                }).then(json => {
+                    if (json.code !== 0) {
+                        throw Error(`json code[${json.code}]`);
+                    }
+                    postRandomHint.hidden = true;
+                    postRandomUl.hidden = false;
+                    let randomPosts = json.data;
+                    for (const post of randomPosts) {
+                        let li = document.createElement("li");
+                        li.classList.add("post-random-li");
+                        li.innerHTML = `<a class="post-random-a" href="/p/${post.id}.html" title="${post.title}"><div style="width: 75%">${post.title}</div><div style="max-width:15%;float: right">阅读数：${post.pv}</div></a>`
+                        postRandomUl.appendChild(li);
+                    }
+                }).catch(err => {
+                    postRandomHint.innerHTML = "加载失败...";
+                    console.log('请求错误', err);
+                })
+            };
+            changeRandomPostBtn.addEventListener("click", changeRandomPost);
+        {{- end }}
     </script>
     </body>
     </html>
