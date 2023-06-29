@@ -149,7 +149,7 @@
                                 {{- if .Topics }}
                                     ，标签：
                                     {{- range .Topics }}
-                                        <a href="/topic/{{.}}.html" class="anchor-link-a" title="标签：{{.}}">{{.}}</a>
+                                        <a href="/topic/{{.}}.html" class="anchor-link-a" title="标签：{{.}}">{{. | unescapeHTML}}</a>
                                     {{- end }}
                                 {{- end }}
                             </span>
