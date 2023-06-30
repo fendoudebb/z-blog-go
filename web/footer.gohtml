@@ -44,6 +44,12 @@
                     target="_blank">阿里云</a>
         </p>
         <p>
+            {{- if .Website.Comment.Enabled }}
+                {{- if eq .Website.Comment.Type "giscus" }}
+                    <a href="/message-board.html" title="留言板"
+                       {{ if eq .Req.URL.Path "/message-board.html" }}style="color: #4CAF50"{{ end }}>留言板</a>
+                {{- end}}
+            {{- end }}
             <a href="/sitemap.xml">网站地图</a>
             {{- if .Website.GitHub }}
                 <a href="{{.Website.GitHub}}" target="_blank">GitHub</a>
