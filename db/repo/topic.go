@@ -26,3 +26,20 @@ func GetTopics() ([]Topic, error) {
 	}
 	return topics, nil
 }
+
+func GetRecommendedTopics() ([]string, error) {
+	var topics []string
+	rows, err := db.DB.Query("select name from topic order by sort")
+	if err != nil {
+		return nil, fmt.Errorf("GetRecommendedTopics: %v", err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var topic string
+		if err := rows.Scan(&topic); err != nil {
+			return nil, fmt.Errorf("GetRecommendedTopics: %v", err)
+		}
+		topics = append(topics, topic)
+	}
+	return topics, nil
+}
