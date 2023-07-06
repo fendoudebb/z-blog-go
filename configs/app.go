@@ -5,6 +5,7 @@ import "time"
 type App struct {
 	Server   Server   `yaml:"server"`
 	Database Database `yaml:"database"`
+	Search   Search   `yaml:"search"`
 	Pprof    Pprof    `yaml:"pprof"`
 	Website  Website  `yaml:"website"`
 }
@@ -21,6 +22,12 @@ type Database struct {
 	Name     string
 	User     string
 	Password string
+}
+
+type Search struct {
+	Tsconfig  string
+	Size      int
+	Maxlength int
 }
 
 type Pprof struct {
@@ -40,7 +47,7 @@ type Website struct {
 	Comment     Comment
 	Icp         ICP
 	Meta        []WebsiteMeta
-	Statistics  []WebsiteStatistics
+	Analysis    []WebsiteAnalysis
 }
 
 type Promotion struct {
@@ -65,7 +72,7 @@ type WebsiteMeta struct {
 	Content string
 }
 
-type WebsiteStatistics struct {
+type WebsiteAnalysis struct {
 	Name   string
 	Value  string
 	Enable bool
