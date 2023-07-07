@@ -14,6 +14,11 @@ pprof:
   host: localhost
   port: 6060
 
+search:
+  tsconfig: jiebacfg
+  size: 15
+  maxlength: 50
+
 website:
   name: blog
   author: fendoudebb
