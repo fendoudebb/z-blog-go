@@ -4,14 +4,12 @@ import (
 	"math"
 	"net/http"
 	"strconv"
-	"time"
 	"z-blog-go/db/repo"
 	"z-blog-go/task"
 	"z-blog-go/web"
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	defer repo.Record(r, time.Now())
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil || page < 1 {
 		page = 1

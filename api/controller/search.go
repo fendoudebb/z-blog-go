@@ -4,14 +4,12 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"time"
 	"z-blog-go/configs"
 	"z-blog-go/db/repo"
 	"z-blog-go/web"
 )
 
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	defer repo.Record(r, time.Now())
 	keywords := r.URL.Query().Get("keywords")
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil || page < 1 {
