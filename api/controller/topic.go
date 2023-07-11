@@ -6,13 +6,12 @@ import (
 	"math"
 	"net/http"
 	"strconv"
-	"time"
 	"z-blog-go/db/repo"
+	"z-blog-go/task"
 	"z-blog-go/web"
 )
 
 func TopicHandler(w http.ResponseWriter, r *http.Request) {
-	defer repo.Record(r, time.Now())
 	vars := mux.Vars(r)
 	topic, _ := vars["topic"]
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
@@ -32,8 +31,6 @@ func TopicHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TopicsHandler(w http.ResponseWriter, r *http.Request) {
-	defer repo.Record(r, time.Now())
-	topics, _ := repo.GetTopics()
-	attr := NewAttr(r, topics)
+	attr := NewAttr(r, task.WebsiteStat.Topics)
 	web.ExecuteTemplate(w, "topics", attr)
 }
