@@ -63,7 +63,7 @@ website:
   icp:
     id: 123456
     link: https://beian.miit.gov.cn
-  statistics:
+  analysis:
     - name: baidu
       value: 123456
       enable: false
