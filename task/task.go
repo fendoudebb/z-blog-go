@@ -1,17 +1,23 @@
 package task
 
 import (
-	"log"
 	"time"
 	"z-blog-go/db/repo"
 )
 
-type websiteStatistic struct {
-	PostCount  int
-	RandomPost []repo.RandomPost
+type WebsiteStatistics struct {
+	PostCount         int
+	IpCount           int
+	PageView          int
+	Links             []repo.Link
+	RankPosts         []repo.Post
+	RandomPosts       []repo.RandomPost
+	Topics            []repo.Topic
+	RecommendedTopics []string
+	RankSearchRecords []repo.SearchRecord
 }
 
-var WebsiteStat = &websiteStatistic{}
+var WebsiteStat = &WebsiteStatistics{}
 
 func Start() {
 	go func() {
@@ -19,9 +25,22 @@ func Start() {
 		for {
 			postsCount, _ := repo.CountPosts()
 			WebsiteStat.PostCount = postsCount
-			posts, _ := repo.GetRandomPosts()
-			WebsiteStat.RandomPost = posts
-			log.Println("WebsiteStat", WebsiteStat, posts)
+			ips, _ := repo.CountIps()
+			WebsiteStat.IpCount = ips
+			pageView, _ := repo.CountPageView()
+			WebsiteStat.PageView = pageView
+			links, _ := repo.GetLinks()
+			WebsiteStat.Links = links
+			rankPosts, _ := repo.GetRankPosts()
+			WebsiteStat.RankPosts = rankPosts
+			randomPosts, _ := repo.GetRandomPosts()
+			WebsiteStat.RandomPosts = randomPosts
+			topics, _ := repo.GetTopics()
+			WebsiteStat.Topics = topics
+			recommendedTopics, _ := repo.GetRecommendedTopics()
+			WebsiteStat.RecommendedTopics = recommendedTopics
+			rankSearchRecords, _ := repo.GetRankSearchRecords()
+			WebsiteStat.RankSearchRecords = rankSearchRecords
 			<-ticker.C
 		}
 	}()
