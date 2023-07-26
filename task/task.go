@@ -23,24 +23,34 @@ func Start() {
 	go func() {
 		ticker := time.NewTicker(time.Minute * 5)
 		for {
-			postsCount, _ := repo.CountPosts()
-			WebsiteStat.PostCount = postsCount
-			ips, _ := repo.CountIps()
-			WebsiteStat.IpCount = ips
-			pageView, _ := repo.CountPageView()
-			WebsiteStat.PageView = pageView
-			links, _ := repo.GetLinks()
-			WebsiteStat.Links = links
-			rankPosts, _ := repo.GetRankPosts()
-			WebsiteStat.RankPosts = rankPosts
-			randomPosts, _ := repo.GetRandomPosts()
-			WebsiteStat.RandomPosts = randomPosts
-			topics, _ := repo.GetTopics()
-			WebsiteStat.Topics = topics
-			recommendedTopics, _ := repo.GetRecommendedTopics()
-			WebsiteStat.RecommendedTopics = recommendedTopics
-			rankSearchRecords, _ := repo.GetRankSearchRecords()
-			WebsiteStat.RankSearchRecords = rankSearchRecords
+			go func() {
+				WebsiteStat.PostCount = repo.CountPosts()
+			}()
+			go func() {
+				WebsiteStat.IpCount = repo.CountIps()
+			}()
+			go func() {
+				WebsiteStat.PageView = repo.CountPageView()
+			}()
+			go func() {
+				WebsiteStat.Links = repo.GetLinks()
+			}()
+			go func() {
+				WebsiteStat.RankPosts = repo.GetRankPosts()
+			}()
+			go func() {
+				WebsiteStat.RandomPosts = repo.GetRandomPosts()
+			}()
+			go func() {
+				WebsiteStat.Topics = repo.GetTopics()
+			}()
+			go func() {
+				WebsiteStat.RecommendedTopics = repo.GetRecommendedTopics()
+			}()
+			go func() {
+				WebsiteStat.RankSearchRecords = repo.GetRankSearchRecords()
+			}()
+			go repo.QueryUnknownIp()
 			<-ticker.C
 		}
 	}()
