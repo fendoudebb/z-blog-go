@@ -1,11 +1,20 @@
 package helper
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func GetProto(r *http.Request) string {
 	proto := r.Header.Get("X-Forwarded-Proto")
 	if proto == "" {
 		proto = r.Header.Get("X-Forwarded-Scheme")
+	}
+	if proto == "" {
+		if r.TLS != nil {
+			proto = "https"
+		} else {
+			proto = "http"
+		}
 	}
 	return proto
 }
