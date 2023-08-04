@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"fmt"
+	"log"
 	"z-blog-go/db"
 )
 
@@ -10,36 +10,32 @@ type Topic struct {
 	Count int
 }
 
-func GetTopics() ([]Topic, error) {
+func GetTopics() []Topic {
 	var topics []Topic
-	rows, err := db.DB.Query("select count(1) as count, unnest(topics) as name from post group by name order by count desc")
-	if err != nil {
-		return nil, fmt.Errorf("GetTopics: %v", err)
-	}
+	rows, _ := db.DB.Query("select count(1) as count, unnest(topics) as name from post group by name order by count desc")
 	defer rows.Close()
 	for rows.Next() {
 		var topic Topic
 		if err := rows.Scan(&topic.Count, &topic.Name); err != nil {
-			return nil, fmt.Errorf("GetTopics: %v", err)
+			log.Println("GetTopics err:", err)
+			continue
 		}
 		topics = append(topics, topic)
 	}
-	return topics, nil
+	return topics
 }
 
-func GetRecommendedTopics() ([]string, error) {
+func GetRecommendedTopics() []string {
 	var topics []string
-	rows, err := db.DB.Query("select name from topic order by sort")
-	if err != nil {
-		return nil, fmt.Errorf("GetRecommendedTopics: %v", err)
-	}
+	rows, _ := db.DB.Query("select name from topic order by sort")
 	defer rows.Close()
 	for rows.Next() {
 		var topic string
 		if err := rows.Scan(&topic); err != nil {
-			return nil, fmt.Errorf("GetRecommendedTopics: %v", err)
+			log.Println("GetRecommendedTopics err:", err)
+			continue
 		}
 		topics = append(topics, topic)
 	}
-	return topics, nil
+	return topics
 }
