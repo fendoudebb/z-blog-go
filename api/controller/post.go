@@ -18,7 +18,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostRandomHandler(w http.ResponseWriter, r *http.Request) {
-	randomPosts, _ := repo.GetRandomPosts()
+	randomPosts := repo.GetRandomPosts()
 	task.WebsiteStat.RandomPosts = randomPosts
 	Ok(w, randomPosts)
 }
