@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
-	"log"
 	"math"
 	"net/http"
 	"strconv"
@@ -23,9 +22,8 @@ func TopicHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil || size < 1 || size > 20 {
 		size = 20
 	}
-	posts, _ := repo.GetPostsByTopic(topic, page, size)
-	log.Println("posts", posts)
-	count, _ := repo.CountPostsByTopic(topic)
+	posts := repo.GetPostsByTopic(topic, page, size)
+	count := repo.CountPostsByTopic(topic)
 	attr := NewPaginationAttr(r, posts, page, int(math.Ceil(float64(count)/float64(size))))
 	web.ExecuteTemplate(w, "topic", attr)
 }
