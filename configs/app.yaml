@@ -6,7 +6,7 @@ server:
 database:
   host: localhost
   port: 5432
-  name: blog
+  name: z-blog
   user: postgres
   password: 123456
 
@@ -34,10 +34,10 @@ website:
     type: giscus
     script: |+
       <script src="https://giscus.app/client.js"
-              data-repo=""
-              data-repo-id=""
-              data-category=""
-              data-category-id=""
+              data-repo="fendoudebb/z-blog"
+              data-repo-id="R_kgDOJfvN0Q"
+              data-category="Announcements"
+              data-category-id="DIC_kwDOJfvN0c4CWVNG"
               data-mapping="pathname"
               data-strict="0"
               data-reactions-enabled="1"
