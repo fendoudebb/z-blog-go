@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"fmt"
+	"log"
 	"z-blog-go/db"
 )
 
@@ -14,19 +14,17 @@ type Link struct {
 	Status         int
 }
 
-func GetLinks() ([]Link, error) {
+func GetLinks() []Link {
 	var links []Link
-	rows, err := db.DB.Query("select website, url from link where status=0 order by sort")
-	if err != nil {
-		return nil, fmt.Errorf("GetLinks: %v", err)
-	}
+	rows, _ := db.DB.Query("select website, url from link where status=0 order by sort")
 	defer rows.Close()
 	for rows.Next() {
 		var link Link
 		if err := rows.Scan(&link.Website, &link.Url); err != nil {
-			return nil, fmt.Errorf("GetLinks: %v", err)
+			log.Println("GetLinks err:", err)
+			continue
 		}
 		links = append(links, link)
 	}
-	return links, nil
+	return links
 }
