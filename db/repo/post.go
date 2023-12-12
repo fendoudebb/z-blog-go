@@ -3,6 +3,7 @@ package repo
 import (
 	"fmt"
 	"github.com/lib/pq"
+	"log"
 	"time"
 	"z-blog-go/db"
 )
@@ -35,7 +36,7 @@ type RandomPost struct {
 
 func GetPost(id int) (Post, error) {
 	var post Post
-	row := db.DB.QueryRow("select id, title, keywords, substring(description, 0, 100), topics, content_html, word_count, post_status, pv, like_count, comment_count, comment_status, create_ts from post where id = $1 limit 1", id)
+	row := db.DB.QueryRow("select id, title, keywords, substring(description, 0, 100), topics, content_html, word_count, status, pv, like_count, comment_count, comment_status, create_ts from post where id = $1 limit 1", id)
 	if err := row.Scan(&post.Id, &post.Title, &post.Keywords, &post.Description, pq.Array(&post.Topics), &post.ContentHtml, &post.WordCount, &post.Status, &post.Pv, &post.LikeCount, &post.CommentCount, &post.CommentStatus, &post.CreateTs); err != nil {
 		return post, fmt.Errorf("GetPost %q: %v", id, err)
 	}
@@ -44,7 +45,7 @@ func GetPost(id int) (Post, error) {
 
 func GetPosts(page int, size int) ([]Post, error) {
 	var posts []Post
-	rows, err := db.DB.Query("select id, title, topics, substring(description, 0, 100), pv, create_ts from post where post_status = 0 order by id desc limit $1 offset $2", size, (page-1)*size)
+	rows, err := db.DB.Query("select id, title, topics, substring(description, 0, 100), pv, create_ts from post where status = 0 order by id desc limit $1 offset $2", size, (page-1)*size)
 	if err != nil {
 		return nil, fmt.Errorf("GetPosts: %v", err)
 	}
@@ -59,73 +60,67 @@ func GetPosts(page int, size int) ([]Post, error) {
 	return posts, nil
 }
 
-func GetRandomPosts() ([]RandomPost, error) {
+func GetRandomPosts() []RandomPost {
 	var posts []RandomPost
-	rows, err := db.DB.Query("select id, title, pv from post where post_status=0 order by random() limit 10")
-	if err != nil {
-		return nil, fmt.Errorf("GetRandomPosts: %v", err)
-	}
+	rows, _ := db.DB.Query("select id, title, pv from post where status=0 order by random() limit 10")
 	defer rows.Close()
 	for rows.Next() {
 		var post RandomPost
 		if err := rows.Scan(&post.Id, &post.Title, &post.Pv); err != nil {
-			return nil, fmt.Errorf("GetRandomPosts: %v", err)
+			log.Println("GetRandomPosts err:", err)
+			continue
 		}
 		posts = append(posts, post)
 	}
-	return posts, nil
+	return posts
 }
 
-func GetPostsByTopic(topic string, page int, size int) ([]Post, error) {
+func GetPostsByTopic(topic string, page int, size int) []Post {
 	var posts []Post
-	rows, err := db.DB.Query("select id, title, topics, substring(description, 0, 100), pv, create_ts from post where post_status=0 and $1=ANY(topics) order by id desc limit $2 offset $3", topic, size, (page-1)*size)
-	if err != nil {
-		return nil, fmt.Errorf("GetPostsByTopic: %v", err)
-	}
+	rows, _ := db.DB.Query("select id, title, topics, substring(description, 0, 100), pv, create_ts from post where status=0 and $1=ANY(topics) order by id desc limit $2 offset $3", topic, size, (page-1)*size)
 	defer rows.Close()
 	for rows.Next() {
 		var post Post
 		if err := rows.Scan(&post.Id, &post.Title, pq.Array(&post.Topics), &post.Description, &post.Pv, &post.CreateTs); err != nil {
-			return nil, fmt.Errorf("GetPostsByTopic: %v", err)
+			log.Println("GetPostsByTopic err:", err)
+			continue
 		}
 		posts = append(posts, post)
 	}
-	return posts, nil
+	return posts
 }
 
-func GetRankPosts() ([]Post, error) {
+func GetRankPosts() []Post {
 	var posts []Post
-	rows, err := db.DB.Query("select id, title, pv from post where post_status=0 order by pv desc, id desc limit 5")
-	if err != nil {
-		return nil, fmt.Errorf("GetRankPosts: %v", err)
-	}
+	rows, _ := db.DB.Query("select id, title, pv from post where status=0 order by pv desc, id desc limit 5")
 	defer rows.Close()
 	for rows.Next() {
 		var post Post
 		if err := rows.Scan(&post.Id, &post.Title, &post.Pv); err != nil {
-			return nil, fmt.Errorf("GetRankPosts: %v", err)
+			log.Println("GetRankPosts err:", err)
+			continue
 		}
 		posts = append(posts, post)
 	}
-	return posts, nil
+	return posts
 }
 
-func CountPosts() (int, error) {
+func CountPosts() int {
 	var count int
-	row := db.DB.QueryRow("select count(*) as count from post where post_status = 0")
-	if err := row.Scan(&count); err != nil {
-		return count, fmt.Errorf("CountPosts: %v", err)
+	err := db.DB.QueryRow("select count(*) as count from post where status = 0").Scan(&count)
+	if err != nil {
+		log.Println("CountPosts err:", err)
 	}
-	return count, nil
+	return count
 }
 
-func CountPostsByTopic(topic string) (int, error) {
+func CountPostsByTopic(topic string) int {
 	var count int
-	row := db.DB.QueryRow("select count(*) as count from post where post_status=0 and $1=ANY(topics)", topic)
-	if err := row.Scan(&count); err != nil {
-		return count, fmt.Errorf("CountPostsByTopic: %v", err)
+	err := db.DB.QueryRow("select count(*) as count from post where status=0 and $1=ANY(topics)", topic).Scan(&count)
+	if err != nil {
+		log.Println("CountPostsByTopic err:", err)
 	}
-	return count, nil
+	return count
 }
 
 func GetPostsByKeywords(tsconfig string, keywords string, page int, size int) ([]Post, error) {
@@ -138,7 +133,7 @@ select id, pv, create_ts,
 from (select id, title, description, topics, pv, create_ts,
              tsvector_concat(setweight(to_tsvector('%s', title), 'A'), setweight(to_tsvector('%s', description), 'D')) v,
              websearch_to_tsquery('%s', $1) q
-      from post where post_status=0
+      from post where status=0
 ) temp
 where v @@ q order by ts_rank(v, q) desc offset $2 fetch first $3 rows only
 `, tsconfig, tsconfig, tsconfig, tsconfig, tsconfig, tsconfig)
