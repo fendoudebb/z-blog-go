@@ -8,7 +8,7 @@ import (
 )
 
 func GetSitemap(r *http.Request) (string, error) {
-	baseUrl := helper.GetHost(r) + "://" + helper.GetIp(r)
+	baseUrl := helper.GetProto(r) + "://" + helper.GetHost(r)
 	sql := fmt.Sprintf(`
 select
 xmlroot(
